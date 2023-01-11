@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 public class MainPanel extends JPanel implements ActionListener {
     JButton hostButton, clientButton;
     HostPanel hostPanel;
+    ClientPanel clientPanel;
 
     public MainPanel() {
         hostButton = new JButton("Host");
@@ -27,14 +28,15 @@ public class MainPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        this.removeAll();
+        this.revalidate();
+        this.repaint();
         if(e.getSource() == hostButton) {
-            this.removeAll();
-            this.revalidate();
-            this.repaint();
             hostPanel = new HostPanel();
             this.add(hostPanel);
         } else {
-
+            clientPanel = new ClientPanel();
+            this.add(clientPanel);
         }
     }
 }
