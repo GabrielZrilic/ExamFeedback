@@ -1,5 +1,9 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -8,6 +12,8 @@ import javax.swing.JTextField;
 public class ClientPanel extends JPanel implements ActionListener {
     JTextField portInput, nameInput;
     JButton joinButton;
+    Socket connection;
+    PrintWriter pr;
 
     public ClientPanel() {
         portInput = new JTextField(20);
@@ -27,15 +33,26 @@ public class ClientPanel extends JPanel implements ActionListener {
         joinButton.addActionListener(this);
     }
 
-    private void connecting() {
+    public void connecting() throws IOException {
+        System.out.println("Entered");
+        connection = new Socket(InetAddress.getLocalHost(), Integer.parseInt(portInput.getText()));
+        
+        pr = new PrintWriter(connection.getOutputStream());
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == nameInput) {
             portInput.requestFocus();
+            System.out.println("sending...");
+            pr.println(nameInput.getText());
+            pr.flush();
         }else{
-            connecting();
+            try {
+                connecting();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }  
 

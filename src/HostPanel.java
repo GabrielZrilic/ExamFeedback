@@ -1,23 +1,20 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.ServerSocket;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 public class HostPanel extends JPanel implements ActionListener {
-    private ServerSocket serverSocket;
     public JTextField optionField;
     public JSpinner numSpinner;
     public ArrayList<String> options;
     public JButton startButton, endButton;
     public int questionsNum;
+    public Host host;
 
     public HostPanel() {
         options = new ArrayList<String>();
@@ -25,13 +22,10 @@ public class HostPanel extends JPanel implements ActionListener {
     }
 
     private void startServer() {
-        try {
-            serverSocket = new ServerSocket(0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println(serverSocket.getLocalPort());
-        this.add(new JLabel(Integer.toString(serverSocket.getLocalPort())));
+        host = new Host();
+        host.start();
+        
+        // Refresh frame
         this.revalidate();
         this.repaint();
     }
