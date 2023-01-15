@@ -8,14 +8,14 @@ public class Host extends Thread {
 
     public ServerSocket serverSocket;
     public Socket socket;
-
+    public boolean running = true;
+    
     public void run() {
         try {
-            serverSocket = new ServerSocket(0);                                 // You can't open a port below 1024
-            System.out.println(serverSocket.getLocalPort());
+            serverSocket = new ServerSocket(0);                             // You can't open a port below 1024
+            HostPanel.hostnum.set(serverSocket.getLocalPort());
         } catch (IOException e) {
             e.printStackTrace();
-    
         }
         while (true) {
             try {
@@ -24,9 +24,12 @@ public class Host extends Thread {
                 System.out.println("I/O error: " + e);
             }
             // new thread for a client
-            new Client(socket).start();
-            System.out.println("connected");
+            try {
+                new Client(socket).start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Client added");
         }
-    }
-    
+    } 
 }

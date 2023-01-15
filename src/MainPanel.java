@@ -5,15 +5,17 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class MainPanel extends JPanel implements ActionListener {
-    JButton hostButton, clientButton;
-    HostPanel hostPanel;
-    ClientPanel clientPanel;
+    public JButton hostButton, clientButton;
+    public HostPanel hostPanel;
+    public ClientPanel clientPanel;
 
     public MainPanel() {
         hostButton = new JButton("Host");
         clientButton = new JButton("Client");
         addUIElements();
         setupActionListener();
+        this.revalidate();
+        this.repaint();
     }
 
     private void addUIElements() {

@@ -10,14 +10,16 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class ClientPanel extends JPanel implements ActionListener {
-    JTextField portInput, nameInput;
-    JButton joinButton;
-    Socket connection;
-    PrintWriter pr;
+    public int port; 
+    public JTextField portInput, nameInput;
+    public JButton joinButton;
+    public Socket connection;
+    public PrintWriter pr;
+    public User data;
 
     public ClientPanel() {
-        portInput = new JTextField(20);
-        nameInput = new JTextField(20);
+        portInput = new JTextField(10);
+        nameInput = new JTextField(10);
         joinButton = new JButton("Join");
 
         this.add(nameInput);
@@ -34,26 +36,30 @@ public class ClientPanel extends JPanel implements ActionListener {
     }
 
     public void connecting() throws IOException {
-        System.out.println("Entered");
-        connection = new Socket(InetAddress.getLocalHost(), Integer.parseInt(portInput.getText()));
-        
+        port = Integer.parseInt(portInput.getText());
+        connection = new Socket(InetAddress.getLocalHost(), port);
         pr = new PrintWriter(connection.getOutputStream());
+        data = new User();
+        System.out.println("Connected to host");
+    }
+
+    public void sendData(String data) {
+        pr.println(data);
+        pr.flush();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == nameInput) {
             portInput.requestFocus();
-            System.out.println("sending...");
-            pr.println(nameInput.getText());
-            pr.flush();
-        }else{
+            System.out.println(nameInput.getText());
+        }else if(e.getSource() == portInput) {
             try {
                 connecting();
+                data.userName = nameInput.getText();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
         }
-    }  
-
+    }
 }

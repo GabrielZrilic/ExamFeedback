@@ -1,14 +1,19 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 public class HostPanel extends JPanel implements ActionListener {
+    public static AtomicInteger hostnum = new AtomicInteger(0);
+    public static AtomicInteger idnum = new AtomicInteger(0);
+
     public JTextField optionField;
     public JSpinner numSpinner;
     public ArrayList<String> options;
@@ -24,7 +29,6 @@ public class HostPanel extends JPanel implements ActionListener {
     private void startServer() {
         host = new Host();
         host.start();
-        
         // Refresh frame
         this.revalidate();
         this.repaint();
@@ -37,15 +41,10 @@ public class HostPanel extends JPanel implements ActionListener {
         startButton = new JButton("Start");
         endButton = new JButton("End");
         
-
-
         this.add(optionField);  optionField.addActionListener(this);
         this.add(numSpinner);
         this.add(startButton);  startButton.addActionListener(this);
         endButton.addActionListener(this);
-    }
-
-    private void stopServer() {
     }
 
     @Override
@@ -58,8 +57,14 @@ public class HostPanel extends JPanel implements ActionListener {
             this.remove(startButton);
             this.add(endButton);
             startServer();
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            this.add(new JLabel(hostnum.toString()));
         } else {
-            stopServer();
+            host.running = false;
         }
     }
 }
