@@ -1,6 +1,8 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -16,6 +18,9 @@ public class ClientPanel extends JPanel implements ActionListener {
     public Socket connection;
     public PrintWriter pr;
     public User data;
+    public InputStreamReader in;
+    public BufferedReader bf;
+    public String receivedData;
 
     public ClientPanel() {
         portInput = new JTextField(10);
@@ -40,7 +45,17 @@ public class ClientPanel extends JPanel implements ActionListener {
         connection = new Socket(InetAddress.getLocalHost(), port);
         pr = new PrintWriter(connection.getOutputStream());
         data = new User();
+        in = new InputStreamReader(connection.getInputStream());
+        bf = new BufferedReader(in);
         System.out.println("Connected to host");
+        getData();
+        System.out.println(receivedData);
+    }
+
+    public void getData() throws IOException {
+        while(receivedData == null) {
+            receivedData = bf.readLine();
+        }
     }
 
     public void sendData(String data) {
@@ -56,6 +71,7 @@ public class ClientPanel extends JPanel implements ActionListener {
         }else if(e.getSource() == portInput) {
             try {
                 connecting();
+                sendData("hello");
                 data.userName = nameInput.getText();
             } catch (IOException e1) {
                 e1.printStackTrace();

@@ -1,7 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 public class Client extends Thread {
@@ -9,17 +9,16 @@ public class Client extends Thread {
     public boolean running;
     public InputStreamReader in;
     public BufferedReader bf;
-    public ObjectOutputStream out;
+    public PrintWriter out;
     public String receivedData;
 
     public Client(Socket socket) throws IOException {
         receivedData = "data not received";
         this.socket = socket;
         running = true;
-        out = new ObjectOutputStream(socket.getOutputStream());
+        out = new PrintWriter(socket.getOutputStream(), true);
         in = new InputStreamReader(socket.getInputStream());
         bf = new BufferedReader(in);
-        sendData(HostPanel.idnum.toString());
         HostPanel.idnum.incrementAndGet();
     }
 
@@ -28,14 +27,14 @@ public class Client extends Thread {
     }
 
     public void sendData(String str) throws IOException {
-        out.writeObject(str);
+        out.println(str);
     }
 
     @Override
     public void run() {
         try {
-            getData();
-            System.out.println("written");
+            sendData(HostPanel.stringSend.get());
+            // System.out.println(receivedData);
         } catch (IOException e) {
             e.printStackTrace();
         }

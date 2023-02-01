@@ -2,6 +2,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -13,6 +14,7 @@ import javax.swing.SpinnerNumberModel;
 public class HostPanel extends JPanel implements ActionListener {
     public static AtomicInteger hostnum = new AtomicInteger(0);
     public static AtomicInteger idnum = new AtomicInteger(0);
+    public static AtomicReference<String> stringSend = new AtomicReference<String>();
 
     public JTextField optionField;
     public JSpinner numSpinner;
@@ -32,6 +34,15 @@ public class HostPanel extends JPanel implements ActionListener {
         // Refresh frame
         this.revalidate();
         this.repaint();
+    }
+
+    private void setAtomicToString() {
+        String p = "";
+        for(int i = 0; i<options.size(); i++) {
+            p += options.get(i);
+            p += "@";
+        }
+        stringSend.set(p);
     }
 
     // Add options and number of questions
@@ -56,6 +67,7 @@ public class HostPanel extends JPanel implements ActionListener {
             questionsNum = (Integer) numSpinner.getValue();
             this.remove(startButton);
             this.add(endButton);
+            setAtomicToString();
             startServer();
             try {
                 Thread.sleep(20);

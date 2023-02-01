@@ -6,7 +6,10 @@
 - [ ] Naziv zadatka
 - [ ] Statistika ocjena
 - [ ] Statistika zadatka
-- [ ] Komentar
+
+## Trenutno stanje
+- Host   ---> Client    RADI
+- Client ---> Host      RADI
 
 ### Možda
 - Spremanje podataka
