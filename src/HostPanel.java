@@ -1,9 +1,14 @@
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,6 +22,7 @@ public class HostPanel extends JPanel implements ActionListener {
     public static AtomicReference<String> stringSend = new AtomicReference<String>();
 
     public JTextField optionField;
+    public JLabel txt1, txt2;
     public JSpinner numSpinner;
     public ArrayList<String> options;
     public JButton startButton, endButton;
@@ -48,14 +54,35 @@ public class HostPanel extends JPanel implements ActionListener {
     // Add options and number of questions
     private void addOptions() {
         optionField = new JTextField(20);
+        optionField.setFont(MainPanel.font);
         numSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 200, 1));
         startButton = new JButton("Start");
         endButton = new JButton("End");
+        numSpinner.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));
+        startButton.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));
+        endButton.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));
         
-        this.add(optionField);  optionField.addActionListener(this);
-        this.add(numSpinner);
-        this.add(startButton);  startButton.addActionListener(this);
+        txt1 = new JLabel("Ponuđeni odgovori"); txt1.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+        txt2 = new JLabel("Broj pitanja");      txt2.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+
+        this.setLayout(new GridBagLayout());
+        this.add(txt1, setLocation(0, 0, GridBagConstraints.BOTH, 1, 0.1, 1));
+        this.add(txt2, setLocation(1, 0, GridBagConstraints.BOTH, 1, 0.1, 1));
+        this.add(optionField, setLocation(0, 1, GridBagConstraints.HORIZONTAL, 1, 1, 1));  optionField.addActionListener(this);
+        this.add(numSpinner, setLocation(1, 1, GridBagConstraints.HORIZONTAL, 1, 1, 1));
+        this.add(startButton, setLocation(0, 2, GridBagConstraints.BOTH, 1, 1, 2));  startButton.addActionListener(this);
         endButton.addActionListener(this);
+    }
+
+    private GridBagConstraints setLocation(int x, int y, int fill, double weightx, double weighty, int gridwidth) {
+        GridBagConstraints c = new GridBagConstraints();
+        c.weightx = weightx; c.weighty = weighty;
+        c.gridx = x; c.gridy = y;
+        c.fill = fill;
+        c.gridwidth = gridwidth;
+        c.ipadx = 10;
+        c.ipady = 10;
+        return c;
     }
 
     @Override
@@ -66,7 +93,8 @@ public class HostPanel extends JPanel implements ActionListener {
         } else if(e.getSource() == startButton) {
             questionsNum = (Integer) numSpinner.getValue();
             this.remove(startButton);
-            this.add(endButton);
+            endButton.setFont(new Font(Font.MONOSPACED, Font.BOLD, 30));
+            this.add(endButton, setLocation(0, 3, GridBagConstraints.BOTH, 1, 1, 3));  startButton.addActionListener(this);
             setAtomicToString();
             startServer();
             try {
@@ -74,7 +102,14 @@ public class HostPanel extends JPanel implements ActionListener {
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
-            this.add(new JLabel(hostnum.toString()));
+            JPanel p = new JPanel();
+            JLabel portLabel = new JLabel(hostnum.toString());
+            portLabel.setFont(new Font(Font.MONOSPACED, Font.BOLD, 40));
+            p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
+            p.add(Box.createHorizontalGlue());
+            p.add(portLabel);
+            p.add(Box.createHorizontalGlue());
+            this.add(p, setLocation(0, 2, GridBagConstraints.BOTH, 1, 1, 3));
         } else {
             host.running = false;
         }

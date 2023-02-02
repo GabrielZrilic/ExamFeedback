@@ -20,14 +20,9 @@ public class Host extends Thread {
         while (true) {
             try {
                 socket = serverSocket.accept();
-            } catch (IOException e) {
-                System.out.println("I/O error: " + e);
-            }
-            // new thread for a client
-            try {
                 new Client(socket).start();
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("I/O error: " + e);
             }
             System.out.println("Client added");
         }
