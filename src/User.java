@@ -6,7 +6,7 @@ public class User {
     public int id, points, grade;
     public ArrayList<Integer> ans;
 
-    public User(String dataIn) {                                                // dataIn = "userName@group@points@grade"
+    public User(String dataIn) {                                                // dataIn = "userName@group@points@grade@ans"
         ans = new ArrayList<Integer>();
         String[] strArr = dataIn.split("@", 4);
 

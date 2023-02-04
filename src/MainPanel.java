@@ -1,17 +1,26 @@
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class MainPanel extends JPanel implements ActionListener {
+    public static Font font = new Font(Font.MONOSPACED, Font.BOLD,  16);
+
     public JButton hostButton, clientButton;
     public HostPanel hostPanel;
     public ClientPanel clientPanel;
 
     public MainPanel() {
-        hostButton = new JButton("Host");
-        clientButton = new JButton("Client");
+        hostButton = new JButton("Nastavnik");       hostButton.setFont(new Font(Font.MONOSPACED, Font.BOLD, 20));
+        clientButton = new JButton(" Učenik ");   clientButton.setFont(new Font(Font.MONOSPACED, Font.BOLD, 20));
+        hostButton.setFocusable(false);
+        clientButton.setFocusable(false);
         addUIElements();
         setupActionListener();
         this.revalidate();
@@ -19,13 +28,28 @@ public class MainPanel extends JPanel implements ActionListener {
     }
 
     private void addUIElements() {
+        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        this.add(Box.createHorizontalGlue());
         this.add(hostButton);
+        this.add(Box.createHorizontalGlue());
         this.add(clientButton);
+        this.add(Box.createHorizontalGlue());
+        this.setVisible(true);
     }
 
     private void setupActionListener() {
         hostButton.addActionListener(this);
         clientButton.addActionListener(this);
+    }
+
+    public static GridBagConstraints setLocation(int x, int y, int fill, double weightx, double weighty, int gridwidth) {
+        GridBagConstraints c = new GridBagConstraints();
+        c.weightx = weightx; c.weighty = weighty;
+        c.gridx = x; c.gridy = y;
+        c.fill = fill;
+        c.gridwidth = gridwidth;
+        c.insets = new Insets(30, 10, 30, 10);
+        return c;
     }
 
     @Override
