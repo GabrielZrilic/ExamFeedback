@@ -12,7 +12,7 @@ public class Host extends Thread {
     
     public void run() {
         try {
-            serverSocket = new ServerSocket(0);                             // You can't open a port below 1024
+            serverSocket = new ServerSocket(0);
             HostPanel.hostnum.set(serverSocket.getLocalPort());
         } catch (IOException e) {
             e.printStackTrace();

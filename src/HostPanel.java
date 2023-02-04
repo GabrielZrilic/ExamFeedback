@@ -66,24 +66,15 @@ public class HostPanel extends JPanel implements ActionListener {
         txt2 = new JLabel("Broj pitanja");      txt2.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
 
         this.setLayout(new GridBagLayout());
-        this.add(txt1, setLocation(0, 0, GridBagConstraints.BOTH, 1, 0.1, 1));
-        this.add(txt2, setLocation(1, 0, GridBagConstraints.BOTH, 1, 0.1, 1));
-        this.add(optionField, setLocation(0, 1, GridBagConstraints.HORIZONTAL, 1, 1, 1));  optionField.addActionListener(this);
-        this.add(numSpinner, setLocation(1, 1, GridBagConstraints.HORIZONTAL, 1, 1, 1));
-        this.add(startButton, setLocation(0, 2, GridBagConstraints.BOTH, 1, 1, 2));  startButton.addActionListener(this);
+        this.add(txt1, MainPanel.setLocation(0, 0, GridBagConstraints.BOTH, 1, 0.1, 1));
+        this.add(txt2, MainPanel.setLocation(1, 0, GridBagConstraints.BOTH, 1, 0.1, 1));
+        this.add(optionField, MainPanel.setLocation(0, 1, GridBagConstraints.HORIZONTAL, 1, 1, 1));  optionField.addActionListener(this);
+        this.add(numSpinner, MainPanel.setLocation(1, 1, GridBagConstraints.HORIZONTAL, 1, 1, 1));
+        this.add(startButton, MainPanel.setLocation(0, 2, GridBagConstraints.BOTH, 1, 1, 2));  startButton.addActionListener(this);
         endButton.addActionListener(this);
     }
 
-    private GridBagConstraints setLocation(int x, int y, int fill, double weightx, double weighty, int gridwidth) {
-        GridBagConstraints c = new GridBagConstraints();
-        c.weightx = weightx; c.weighty = weighty;
-        c.gridx = x; c.gridy = y;
-        c.fill = fill;
-        c.gridwidth = gridwidth;
-        c.ipadx = 10;
-        c.ipady = 10;
-        return c;
-    }
+    
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -94,7 +85,7 @@ public class HostPanel extends JPanel implements ActionListener {
             questionsNum = (Integer) numSpinner.getValue();
             this.remove(startButton);
             endButton.setFont(new Font(Font.MONOSPACED, Font.BOLD, 30));
-            this.add(endButton, setLocation(0, 3, GridBagConstraints.BOTH, 1, 1, 3));  startButton.addActionListener(this);
+            this.add(endButton, MainPanel.setLocation(0, 3, GridBagConstraints.BOTH, 1, 1, 3));  startButton.addActionListener(this);
             setAtomicToString();
             startServer();
             try {
@@ -103,13 +94,13 @@ public class HostPanel extends JPanel implements ActionListener {
                 e1.printStackTrace();
             }
             JPanel p = new JPanel();
-            JLabel portLabel = new JLabel(hostnum.toString());
-            portLabel.setFont(new Font(Font.MONOSPACED, Font.BOLD, 40));
+            JLabel portLabel = new JLabel(Data.getIp() + "    " + hostnum.toString());
+            portLabel.setFont(new Font(Font.MONOSPACED, Font.BOLD, 35));
             p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
             p.add(Box.createHorizontalGlue());
             p.add(portLabel);
             p.add(Box.createHorizontalGlue());
-            this.add(p, setLocation(0, 2, GridBagConstraints.BOTH, 1, 1, 3));
+            this.add(p, MainPanel.setLocation(0, 2, GridBagConstraints.BOTH, 1, 1, 3));
         } else {
             host.running = false;
         }

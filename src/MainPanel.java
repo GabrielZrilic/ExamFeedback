@@ -1,4 +1,6 @@
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,8 +17,8 @@ public class MainPanel extends JPanel implements ActionListener {
     public ClientPanel clientPanel;
 
     public MainPanel() {
-        hostButton = new JButton("Host");       hostButton.setFont(new Font(Font.MONOSPACED, Font.BOLD, 20));
-        clientButton = new JButton("Client");   clientButton.setFont(new Font(Font.MONOSPACED, Font.BOLD, 20));
+        hostButton = new JButton("Nastavnik");       hostButton.setFont(new Font(Font.MONOSPACED, Font.BOLD, 20));
+        clientButton = new JButton(" Učenik ");   clientButton.setFont(new Font(Font.MONOSPACED, Font.BOLD, 20));
         hostButton.setFocusable(false);
         clientButton.setFocusable(false);
         addUIElements();
@@ -38,6 +40,16 @@ public class MainPanel extends JPanel implements ActionListener {
     private void setupActionListener() {
         hostButton.addActionListener(this);
         clientButton.addActionListener(this);
+    }
+
+    public static GridBagConstraints setLocation(int x, int y, int fill, double weightx, double weighty, int gridwidth) {
+        GridBagConstraints c = new GridBagConstraints();
+        c.weightx = weightx; c.weighty = weighty;
+        c.gridx = x; c.gridy = y;
+        c.fill = fill;
+        c.gridwidth = gridwidth;
+        c.insets = new Insets(30, 10, 30, 10);
+        return c;
     }
 
     @Override
