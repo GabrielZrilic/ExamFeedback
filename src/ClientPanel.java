@@ -1,6 +1,7 @@
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -12,6 +13,7 @@ import java.net.Socket;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 public class ClientPanel extends JPanel implements ActionListener {
@@ -23,11 +25,12 @@ public class ClientPanel extends JPanel implements ActionListener {
     public InputStreamReader in;
     public BufferedReader bf;
     public String receivedData;
+    public JScrollPane scrollPane;
 
     public ClientPanel() {
         portInput = new JTextField();
-        nameInput = new JTextField();
-        ipInput = new JTextField();
+        nameInput = new JTextField("Demo");
+        ipInput = new JTextField("192.168.5.19");
         joinButton = new JButton("Riješi anketu");
         
         setGui();
@@ -66,15 +69,14 @@ public class ClientPanel extends JPanel implements ActionListener {
     }
 
     public void connecting() throws IOException {
-        // TODO: fix ip address connection
         connection = new Socket(ipInput.getText(), Integer.parseInt(portInput.getText()));
         pr = new PrintWriter(connection.getOutputStream());
-        data = new User();
         in = new InputStreamReader(connection.getInputStream());
         bf = new BufferedReader(in);
-        System.out.println("Connected to host");
         getData();
         System.out.println(receivedData);
+        data = new User(receivedData, User.side.CLIENT);
+        data.userName = nameInput.getText();
     }
 
     public void getData() throws IOException {
@@ -88,16 +90,27 @@ public class ClientPanel extends JPanel implements ActionListener {
         pr.flush();
     }
 
+    private void startForm() {
+        scrollPane = new JScrollPane(new Form(data));
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
+        this.removeAll();
+        this.setLayout(new GridLayout(1, 1));
+        this.add(scrollPane);
+        this.revalidate();
+        this.repaint();
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == nameInput) {
             portInput.requestFocus();
             System.out.println(nameInput.getText());
-        }else if(e.getSource() == portInput) {
+        }else if(e.getSource() == portInput || e.getSource() == joinButton) {
             try {
                 connecting();
-                sendData("hello");
-                data.userName = nameInput.getText();
+                startForm();
+                sendData("null");
             } catch (IOException e1) {
                 e1.printStackTrace();
             }

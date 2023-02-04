@@ -19,6 +19,7 @@ import javax.swing.SpinnerNumberModel;
 public class HostPanel extends JPanel implements ActionListener {
     public static AtomicInteger hostnum = new AtomicInteger(0);
     public static AtomicInteger idnum = new AtomicInteger(0);
+    public static AtomicInteger questionNum = new AtomicInteger(0);
     public static AtomicReference<String> stringSend = new AtomicReference<String>();
 
     public JTextField optionField;
@@ -26,7 +27,6 @@ public class HostPanel extends JPanel implements ActionListener {
     public JSpinner numSpinner;
     public ArrayList<String> options;
     public JButton startButton, endButton;
-    public int questionsNum;
     public Host host;
 
     public HostPanel() {
@@ -82,7 +82,7 @@ public class HostPanel extends JPanel implements ActionListener {
             options.add(optionField.getText());
             optionField.setText("");
         } else if(e.getSource() == startButton) {
-            questionsNum = (Integer) numSpinner.getValue();
+            questionNum.set((Integer) numSpinner.getValue());
             this.remove(startButton);
             endButton.setFont(new Font(Font.MONOSPACED, Font.BOLD, 30));
             this.add(endButton, MainPanel.setLocation(0, 3, GridBagConstraints.BOTH, 1, 1, 3));  startButton.addActionListener(this);

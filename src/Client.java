@@ -11,6 +11,7 @@ public class Client extends Thread {
     public BufferedReader bf;
     public PrintWriter out;
     public String receivedData;
+    public int numOfQuestions;
 
     public Client(Socket socket) throws IOException {
         receivedData = "data not received";
@@ -19,22 +20,22 @@ public class Client extends Thread {
         out = new PrintWriter(socket.getOutputStream(), true);
         in = new InputStreamReader(socket.getInputStream());
         bf = new BufferedReader(in);
-        HostPanel.idnum.incrementAndGet();
     }
 
     public void getData() throws IOException {
         receivedData = bf.readLine();
     }
 
-    public void sendData(String str) throws IOException {
+    public void sendData() throws IOException {
+        String str = Integer.toString(HostPanel.idnum.getAndIncrement()) + "@" + Integer.toString(HostPanel.questionNum.getAcquire()) +
+                      "@" + HostPanel.stringSend;
         out.println(str);
     }
 
     @Override
     public void run() {
         try {
-            sendData(HostPanel.stringSend.get());
-            // System.out.println(receivedData);
+            sendData();
         } catch (IOException e) {
             e.printStackTrace();
         }
