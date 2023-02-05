@@ -10,15 +10,15 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class MainPanel extends JPanel implements ActionListener {
-    public static Font font = new Font(Font.MONOSPACED, Font.BOLD,  16);
-
     public JButton hostButton, clientButton;
     public HostPanel hostPanel;
     public ClientPanel clientPanel;
+    public static Font font;
 
     public MainPanel() {
-        hostButton = new JButton("Nastavnik");       hostButton.setFont(new Font(Font.MONOSPACED, Font.BOLD, 20));
-        clientButton = new JButton(" Učenik ");   clientButton.setFont(new Font(Font.MONOSPACED, Font.BOLD, 20));
+        hostButton = new JButton("Nastavnik");
+        clientButton = new JButton(" Učenik ");
+        font = hostButton.getFont();
         hostButton.setFocusable(false);
         clientButton.setFocusable(false);
         addUIElements();
@@ -28,9 +28,12 @@ public class MainPanel extends JPanel implements ActionListener {
     }
 
     private void addUIElements() {
+        hostButton.setFont(font.deriveFont((float) 25));
+        clientButton.setFont(font.deriveFont((float) 25));
+
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         this.add(Box.createHorizontalGlue());
-        this.add(hostButton);
+        this.add(hostButton);   
         this.add(Box.createHorizontalGlue());
         this.add(clientButton);
         this.add(Box.createHorizontalGlue());

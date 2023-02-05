@@ -1,4 +1,3 @@
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -26,6 +25,7 @@ public class ClientPanel extends JPanel implements ActionListener {
     public BufferedReader bf;
     public String receivedData;
     public JScrollPane scrollPane;
+    public Form form;
 
     public ClientPanel() {
         portInput = new JTextField();
@@ -40,17 +40,18 @@ public class ClientPanel extends JPanel implements ActionListener {
     private void setGui() {
         this.setLayout(new GridBagLayout());
         JLabel imeLabel = new JLabel("Korisničko ime:"), ipLabel = new JLabel("IP adresa:"), portLabel = new JLabel("Upiši sučelje:");
-        imeLabel.setFont(MainPanel.font);
-        ipLabel.setFont(MainPanel.font);
-        portLabel.setFont(MainPanel.font);
-        joinButton.setFont(new Font(Font.MONOSPACED, Font.BOLD, 35));
+
+        portInput.setFont(MainPanel.font.deriveFont((float) 31));
+        nameInput.setFont(MainPanel.font.deriveFont((float) 31));
+        ipInput.setFont(MainPanel.font.deriveFont((float) 31));
+        joinButton.setFont(MainPanel.font.deriveFont((float) 31));
+        imeLabel.setFont(MainPanel.font.deriveFont((float) 19));
+        ipLabel.setFont(MainPanel.font.deriveFont((float) 19));
+        portLabel.setFont(MainPanel.font.deriveFont((float) 19));
 
         nameInput.setToolTipText("Primjer: Marko");
-        nameInput.setFont(MainPanel.font);
         ipInput.setToolTipText("Primjer: 192.168.5.19");
-        ipInput.setFont(MainPanel.font);
         portInput.setToolTipText("Primjer: 40153");
-        portInput.setFont(MainPanel.font);
 
 
         this.add(imeLabel, MainPanel.setLocation(0, 0, GridBagConstraints.BOTH, 0.5, 0.5, 1));
@@ -91,7 +92,8 @@ public class ClientPanel extends JPanel implements ActionListener {
     }
 
     private void startForm() {
-        scrollPane = new JScrollPane(new Form(data));
+        form = new Form(data);
+        scrollPane = new JScrollPane(form);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
         this.removeAll();
