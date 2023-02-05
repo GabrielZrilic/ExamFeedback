@@ -10,10 +10,11 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class MainPanel extends JPanel implements ActionListener {
-    public JButton hostButton, clientButton;
-    public HostPanel hostPanel;
-    public ClientPanel clientPanel;
     public static Font font;
+    
+    private JButton hostButton, clientButton;
+    private HostPanel hostPanel;
+    private ClientPanel clientPanel;
 
     public MainPanel() {
         hostButton = new JButton("Nastavnik");

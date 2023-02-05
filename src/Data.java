@@ -11,10 +11,6 @@ public class Data {
     
     public ArrayList<User> users = new ArrayList<User>();
 
-    public void getData(String dataIn) {
-        // received string turn into data (int, string, char...) 
-    }
-
     public static String getIp() {
         String retString = "";
         try {

@@ -21,12 +21,12 @@ public class HostPanel extends JPanel implements ActionListener {
     public static AtomicInteger questionNum = new AtomicInteger(0);
     public static AtomicReference<String> stringSend = new AtomicReference<String>();
 
-    public JTextField optionField;
-    public JLabel txt1, txt2;
-    public JSpinner numSpinner;
-    public ArrayList<String> options;
-    public JButton startButton, endButton;
-    public Host host;
+    private JTextField optionField;
+    private JLabel txt1, txt2;
+    private JSpinner numSpinner;
+    private ArrayList<String> options;
+    private JButton startButton, endButton;
+    private Host host;
 
     public HostPanel() {
         options = new ArrayList<String>();
@@ -75,11 +75,10 @@ public class HostPanel extends JPanel implements ActionListener {
         endButton.addActionListener(this);
     }
 
-    
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == optionField) {
+        if(e.getSource() == optionField && optionField.getText().length() > 0) {
             options.add(optionField.getText());
             optionField.setText("");
         } else if(e.getSource() == startButton) {
@@ -89,7 +88,7 @@ public class HostPanel extends JPanel implements ActionListener {
             setAtomicToString();
             startServer();
             try {
-                Thread.sleep(20);
+                Thread.sleep(100);
             } catch (InterruptedException e1) { }
             JPanel p = new JPanel();
             JLabel portLabel = new JLabel(Data.getIp() + "    " + hostnum.toString());
@@ -100,8 +99,8 @@ public class HostPanel extends JPanel implements ActionListener {
             p.add(portLabel);
             p.add(Box.createHorizontalGlue());
             this.add(p, MainPanel.setLocation(0, 2, GridBagConstraints.BOTH, 1, 1, 3));
-        } else {
-            host.running = false;
+        } else if(e.getSource() == endButton){
+            
         }
     }
 }
