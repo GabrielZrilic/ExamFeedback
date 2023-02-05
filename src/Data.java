@@ -5,13 +5,11 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 
 public class Data {
-    public ArrayList<String> ansList = new ArrayList<String>();
+    public static ArrayList<String> ansList = new ArrayList<String>();
+
+    public static int numOfQ = 0;
     
     public ArrayList<User> users = new ArrayList<User>();
-
-    public void getData(String dataIn) {
-        // received string turn into data (int, string, char...) 
-    }
 
     public static String getIp() {
         String retString = "";

@@ -1,4 +1,4 @@
-import java.awt.Font;
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -12,23 +12,27 @@ import java.net.Socket;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 public class ClientPanel extends JPanel implements ActionListener {
     public JTextField portInput, nameInput, ipInput;
-    public JButton joinButton;
+    public JButton joinButton, endButton;
     public Socket connection;
     public PrintWriter pr;
     public User data;
     public InputStreamReader in;
     public BufferedReader bf;
     public String receivedData;
+    public JScrollPane scrollPane;
+    public Form form;
 
     public ClientPanel() {
         portInput = new JTextField();
-        nameInput = new JTextField();
-        ipInput = new JTextField();
+        nameInput = new JTextField("Demo");
+        ipInput = new JTextField("192.168.5.19");
         joinButton = new JButton("Riješi anketu");
+        endButton = new JButton("Pošalji");
         
         setGui();
         addListener();
@@ -37,17 +41,18 @@ public class ClientPanel extends JPanel implements ActionListener {
     private void setGui() {
         this.setLayout(new GridBagLayout());
         JLabel imeLabel = new JLabel("Korisničko ime:"), ipLabel = new JLabel("IP adresa:"), portLabel = new JLabel("Upiši sučelje:");
-        imeLabel.setFont(MainPanel.font);
-        ipLabel.setFont(MainPanel.font);
-        portLabel.setFont(MainPanel.font);
-        joinButton.setFont(new Font(Font.MONOSPACED, Font.BOLD, 35));
+
+        portInput.setFont(MainPanel.font.deriveFont((float) 31));
+        nameInput.setFont(MainPanel.font.deriveFont((float) 31));
+        ipInput.setFont(MainPanel.font.deriveFont((float) 31));
+        joinButton.setFont(MainPanel.font.deriveFont((float) 31));
+        imeLabel.setFont(MainPanel.font.deriveFont((float) 19));
+        ipLabel.setFont(MainPanel.font.deriveFont((float) 19));
+        portLabel.setFont(MainPanel.font.deriveFont((float) 19));
 
         nameInput.setToolTipText("Primjer: Marko");
-        nameInput.setFont(MainPanel.font);
         ipInput.setToolTipText("Primjer: 192.168.5.19");
-        ipInput.setFont(MainPanel.font);
         portInput.setToolTipText("Primjer: 40153");
-        portInput.setFont(MainPanel.font);
 
 
         this.add(imeLabel, MainPanel.setLocation(0, 0, GridBagConstraints.BOTH, 0.5, 0.5, 1));
@@ -63,29 +68,43 @@ public class ClientPanel extends JPanel implements ActionListener {
         nameInput.addActionListener(this);
         portInput.addActionListener(this);
         joinButton.addActionListener(this);
+        endButton.addActionListener(this);
     }
 
-    public void connecting() throws IOException {
-        // TODO: fix ip address connection
+    private void connecting() throws IOException {
         connection = new Socket(ipInput.getText(), Integer.parseInt(portInput.getText()));
         pr = new PrintWriter(connection.getOutputStream());
-        data = new User();
         in = new InputStreamReader(connection.getInputStream());
         bf = new BufferedReader(in);
-        System.out.println("Connected to host");
         getData();
         System.out.println(receivedData);
+        data = new User(receivedData, User.side.CLIENT);
+        data.userName = nameInput.getText();
     }
 
-    public void getData() throws IOException {
+    private void getData() throws IOException {
         while(receivedData == null) {
             receivedData = bf.readLine();
         }
     }
 
-    public void sendData(String data) {
+    private void sendData(String data) {
         pr.println(data);
         pr.flush();
+        System.out.println(data);
+    }
+
+    private void startForm() {
+        form = new Form(data);
+        scrollPane = new JScrollPane(form);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
+        this.removeAll();
+        this.setLayout(new BorderLayout());
+        this.add(scrollPane, BorderLayout.CENTER);
+        this.add(endButton, BorderLayout.PAGE_END);
+        this.revalidate();
+        this.repaint();
     }
 
     @Override
@@ -93,14 +112,19 @@ public class ClientPanel extends JPanel implements ActionListener {
         if(e.getSource() == nameInput) {
             portInput.requestFocus();
             System.out.println(nameInput.getText());
-        }else if(e.getSource() == portInput) {
+        }else if(e.getSource() == portInput || e.getSource() == joinButton) {
             try {
                 connecting();
-                sendData("hello");
-                data.userName = nameInput.getText();
+                startForm();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+        }else if(e.getSource() == endButton) {
+            // "id@userName@ans0@ans1@ans2@ans3..."
+            sendData(Integer.toString(data.id) + "@" + data.userName + "@" + form.getData());
+            JLabel label = new JLabel("Hvala na povratnoj informaciji");
+            this.removeAll();
+            this.add(label);
         }
     }
 }

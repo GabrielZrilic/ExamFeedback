@@ -6,35 +6,37 @@ import java.net.Socket;
 
 public class Client extends Thread {
     public Socket socket;
-    public boolean running;
     public InputStreamReader in;
     public BufferedReader bf;
     public PrintWriter out;
     public String receivedData;
+    public int numOfQuestions;
 
     public Client(Socket socket) throws IOException {
-        receivedData = "data not received";
+        receivedData = null;
         this.socket = socket;
-        running = true;
         out = new PrintWriter(socket.getOutputStream(), true);
         in = new InputStreamReader(socket.getInputStream());
         bf = new BufferedReader(in);
-        HostPanel.idnum.incrementAndGet();
     }
 
     public void getData() throws IOException {
-        receivedData = bf.readLine();
+        while(receivedData == null) {
+            receivedData = bf.readLine();
+        }
     }
 
-    public void sendData(String str) throws IOException {
+    public void sendData() throws IOException {
+        String str = Integer.toString(HostPanel.idnum.getAndIncrement()) + "@" + Integer.toString(HostPanel.questionNum.getAcquire()) +
+                      "@" + HostPanel.stringSend;
         out.println(str);
     }
 
     @Override
     public void run() {
         try {
-            sendData(HostPanel.stringSend.get());
-            // System.out.println(receivedData);
+            sendData();
+            getData();
         } catch (IOException e) {
             e.printStackTrace();
         }
