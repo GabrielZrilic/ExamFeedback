@@ -3,7 +3,6 @@ import java.util.ArrayList;
 public class User {
     public String userName;
     public int id, numOfQuestions;
-    public ArrayList<Integer> ans;
     public ArrayList<String> ansClient;
 
     enum side {
@@ -11,15 +10,15 @@ public class User {
         CLIENT
     }
 
-    public User(String dataIn, side s) {                                                
+    public User(String dataIn, side s) {     
+        ansClient = new ArrayList<String>();                                      
         if(s == side.HOST) constructHostSide(dataIn);
         else constructClientSide(dataIn);
     }
 
     // dataIn = "id@userName@ans0@ans1@ans2@ans3..."
     private void constructHostSide(String dataIn) {
-        ans = new ArrayList<Integer>();
-        String[] strArr = dataIn.split("@", 4);
+        String[] strArr = dataIn.split("@", 0);
 
         id = Integer.parseInt(strArr[0]);
         userName = strArr[1];
@@ -28,7 +27,6 @@ public class User {
 
     // dataIn = id@numOfQuestions@ans0@ans1@ans2@ans3...
     private void constructClientSide(String dataIn) {
-        ansClient = new ArrayList<String>();
         String[] strArr = dataIn.split("@", 0);
 
         id = Integer.parseInt(strArr[0]);

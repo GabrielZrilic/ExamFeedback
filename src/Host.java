@@ -8,22 +8,21 @@ public class Host extends Thread {
 
     public ServerSocket serverSocket;
     public Socket socket;
-    public boolean running = true;
+    public boolean isRunning;
     
     public void run() {
+        isRunning = true;
         try {
             serverSocket = new ServerSocket(0);
             HostPanel.hostnum.set(serverSocket.getLocalPort());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        while (true) {
+        while (isRunning) {
             try {
                 socket = serverSocket.accept();
                 new Client(socket).start();
-            } catch (IOException e) {
-                System.out.println("I/O error: " + e);
-            }
+            } catch (IOException e) {}
             System.out.println("Client added");
         }
     } 

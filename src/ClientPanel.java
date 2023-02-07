@@ -8,9 +8,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -71,7 +74,7 @@ public class ClientPanel extends JPanel implements ActionListener {
         endButton.addActionListener(this);
     }
 
-    private void connecting() throws IOException {
+    private void connecting() throws NumberFormatException, UnknownHostException, IOException {
         connection = new Socket(ipInput.getText(), Integer.parseInt(portInput.getText()));
         pr = new PrintWriter(connection.getOutputStream());
         in = new InputStreamReader(connection.getInputStream());
@@ -110,21 +113,30 @@ public class ClientPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == nameInput) {
+            ipInput.requestFocus();
+        }else if(e.getSource() == ipInput) {
             portInput.requestFocus();
-            System.out.println(nameInput.getText());
-        }else if(e.getSource() == portInput || e.getSource() == joinButton) {
+        }else if((e.getSource() == portInput || e.getSource() == joinButton)) {
+            if(nameInput.getText().length() == 0) return;
+            
             try {
                 connecting();
-                startForm();
-            } catch (IOException e1) {
-                e1.printStackTrace();
+            } catch (NumberFormatException | IOException e1) {
+                JOptionPane.showMessageDialog(new JFrame("Greška"), "Popuni sva polja pravilno");
             }
+            
+            startForm();
         }else if(e.getSource() == endButton) {
             // "id@userName@ans0@ans1@ans2@ans3..."
+            if(form.getData() == null) return;
             sendData(Integer.toString(data.id) + "@" + data.userName + "@" + form.getData());
-            JLabel label = new JLabel("Hvala na povratnoj informaciji");
             this.removeAll();
+            this.setLayout(new GridBagLayout());
+            JLabel label = new JLabel("Hvala na povratnoj informaciji");
+            label.setFont(MainPanel.font.deriveFont((float) 26));
             this.add(label);
+            this.revalidate();
+            this.repaint();
         }
     }
 }
