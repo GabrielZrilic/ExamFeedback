@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+// User data for host and client
 public class User {
     public String userName;
     public int id, numOfQuestions;

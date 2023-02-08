@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+// Client panel UI
 public class ClientPanel extends JPanel implements ActionListener {
     public JTextField portInput, nameInput, ipInput;
     public JButton joinButton, endButton;
@@ -58,13 +59,13 @@ public class ClientPanel extends JPanel implements ActionListener {
         portInput.setToolTipText("Primjer: 40153");
 
 
-        this.add(imeLabel, MainPanel.setLocation(0, 0, GridBagConstraints.BOTH, 0.5, 0.5, 1));
-        this.add(nameInput, MainPanel.setLocation(1, 0, GridBagConstraints.BOTH, 0.5, 0.5, 1));
-        this.add(ipLabel, MainPanel.setLocation(0, 1, GridBagConstraints.BOTH, 0.5, 0.5, 1));
-        this.add(ipInput, MainPanel.setLocation(1, 1, GridBagConstraints.BOTH, 0.5, 0.5, 1));
-        this.add(portLabel, MainPanel.setLocation(0, 2, GridBagConstraints.BOTH, 0.5, 0.5, 1));
-        this.add(portInput, MainPanel.setLocation(1, 2, GridBagConstraints.BOTH, 0.5, 0.5, 1));
-        this.add(joinButton, MainPanel.setLocation(0, 3, GridBagConstraints.BOTH, 0.5, 0.5, 2));
+        this.add(imeLabel, MainPanel.setLocation(0, 0, GridBagConstraints.BOTH, 0.5, 0.5, 1, 30));
+        this.add(nameInput, MainPanel.setLocation(1, 0, GridBagConstraints.BOTH, 0.5, 0.5, 1, 30));
+        this.add(ipLabel, MainPanel.setLocation(0, 1, GridBagConstraints.BOTH, 0.5, 0.5, 1, 30));
+        this.add(ipInput, MainPanel.setLocation(1, 1, GridBagConstraints.BOTH, 0.5, 0.5, 1, 30));
+        this.add(portLabel, MainPanel.setLocation(0, 2, GridBagConstraints.BOTH, 0.5, 0.5, 1, 30));
+        this.add(portInput, MainPanel.setLocation(1, 2, GridBagConstraints.BOTH, 0.5, 0.5, 1, 30));
+        this.add(joinButton, MainPanel.setLocation(0, 3, GridBagConstraints.BOTH, 0.5, 0.5, 2, 30));
     }
 
     private void addListener() {
@@ -74,9 +75,10 @@ public class ClientPanel extends JPanel implements ActionListener {
         endButton.addActionListener(this);
     }
 
+    // Connecting and setting read/write objects
     private void connecting() throws NumberFormatException, UnknownHostException, IOException {
         connection = new Socket(ipInput.getText(), Integer.parseInt(portInput.getText()));
-        pr = new PrintWriter(connection.getOutputStream());
+        pr = new PrintWriter(connection.getOutputStream());     
         in = new InputStreamReader(connection.getInputStream());
         bf = new BufferedReader(in);
         getData();
@@ -85,27 +87,34 @@ public class ClientPanel extends JPanel implements ActionListener {
         data.userName = nameInput.getText();
     }
 
+    // Trying to get data until data is received
     private void getData() throws IOException {
         while(receivedData == null) {
             receivedData = bf.readLine();
         }
     }
 
+    // Send data to host
     private void sendData(String data) {
         pr.println(data);
         pr.flush();
         System.out.println(data);
     }
 
+    // Show a form
     private void startForm() {
+        JPanel div = new JPanel();
         form = new Form(data);
         scrollPane = new JScrollPane(form);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        endButton.setFont(MainPanel.font.deriveFont((float) 24));
 
+        div.setLayout(new GridBagLayout());
+        div.add(endButton, MainPanel.setLocation(0, 0, GridBagConstraints.HORIZONTAL, 1, 1, 1, 5));
         this.removeAll();
         this.setLayout(new BorderLayout());
         this.add(scrollPane, BorderLayout.CENTER);
-        this.add(endButton, BorderLayout.PAGE_END);
+        this.add(div, BorderLayout.PAGE_END);
         this.revalidate();
         this.repaint();
     }
@@ -118,13 +127,11 @@ public class ClientPanel extends JPanel implements ActionListener {
             portInput.requestFocus();
         }else if((e.getSource() == portInput || e.getSource() == joinButton)) {
             if(nameInput.getText().length() == 0) return;
-            
             try {
                 connecting();
             } catch (NumberFormatException | IOException e1) {
                 JOptionPane.showMessageDialog(new JFrame("Greška"), "Popuni sva polja pravilno");
             }
-            
             startForm();
         }else if(e.getSource() == endButton) {
             // "id@userName@ans0@ans1@ans2@ans3..."

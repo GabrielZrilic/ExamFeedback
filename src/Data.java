@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.concurrent.atomic.AtomicReference;
 
+// Getting ip and saving user data
 public class Data {
     
     public static AtomicReference<ArrayList<User>> users = new AtomicReference<>(new ArrayList<>());
@@ -14,9 +15,7 @@ public class Data {
         if(System.getProperty("os.name").contains("Windows")){
             try {
                 return InetAddress.getLocalHost().getHostAddress();
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
+            } catch (UnknownHostException e) { }
         }
 
         String retString = "";
@@ -26,9 +25,7 @@ public class Data {
                 InetAddress addr = addrs.nextElement();
                 retString = addr.getHostAddress();
             }
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
+        } catch (SocketException e) { }
         return retString;
     }
 

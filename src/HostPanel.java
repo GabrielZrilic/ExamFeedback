@@ -20,7 +20,9 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
+// Host UI
 public class HostPanel extends JPanel implements ActionListener {
+    // Thread-shared data
     public static AtomicInteger hostnum = new AtomicInteger(0);
     public static AtomicInteger idnum = new AtomicInteger(0);
     public static AtomicInteger questionNum = new AtomicInteger(0);
@@ -73,11 +75,11 @@ public class HostPanel extends JPanel implements ActionListener {
         txt2.setFont(MainPanel.font.deriveFont((float) 25));
         
         this.setLayout(new GridBagLayout());
-        this.add(txt1, MainPanel.setLocation(0, 0, GridBagConstraints.BOTH, 1, 0.1, 1));
-        this.add(txt2, MainPanel.setLocation(1, 0, GridBagConstraints.BOTH, 1, 0.1, 1));
-        this.add(optionField, MainPanel.setLocation(0, 1, GridBagConstraints.HORIZONTAL, 1, 1, 1));
-        this.add(numSpinner, MainPanel.setLocation(1, 1, GridBagConstraints.HORIZONTAL, 1, 1, 1));
-        this.add(startButton, MainPanel.setLocation(0, 2, GridBagConstraints.BOTH, 1, 1, 2));
+        this.add(txt1, MainPanel.setLocation(0, 0, GridBagConstraints.BOTH, 1, 0.1, 1, 30));
+        this.add(txt2, MainPanel.setLocation(1, 0, GridBagConstraints.BOTH, 1, 0.1, 1, 30));
+        this.add(optionField, MainPanel.setLocation(0, 1, GridBagConstraints.HORIZONTAL, 1, 1, 1, 30));
+        this.add(numSpinner, MainPanel.setLocation(1, 1, GridBagConstraints.HORIZONTAL, 1, 1, 1, 30));
+        this.add(startButton, MainPanel.setLocation(0, 2, GridBagConstraints.BOTH, 1, 1, 2, 30));
         setupActionListener();
     }
 
@@ -101,9 +103,10 @@ public class HostPanel extends JPanel implements ActionListener {
             }
             questionNum.set((Integer) numSpinner.getValue());
             this.remove(startButton);
-            this.add(endButton, MainPanel.setLocation(0, 3, GridBagConstraints.BOTH, 1, 1, 3));  startButton.addActionListener(this);
+            this.add(endButton, MainPanel.setLocation(0, 3, GridBagConstraints.BOTH, 1, 1, 3, 30));  startButton.addActionListener(this);
             setAtomicToString();
             startServer();
+            // Wait before printing port number
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e1) { }
@@ -115,15 +118,13 @@ public class HostPanel extends JPanel implements ActionListener {
             p.add(Box.createHorizontalGlue());
             p.add(portLabel);
             p.add(Box.createHorizontalGlue());
-            this.add(p, MainPanel.setLocation(0, 2, GridBagConstraints.BOTH, 1, 1, 3));
+            this.add(p, MainPanel.setLocation(0, 2, GridBagConstraints.BOTH, 1, 1, 3, 30));
             optionField.setEnabled(false);
             numSpinner.setEnabled(false);
         } else if(e.getSource() == endButton){
             try {
                 host.serverSocket.close();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            } catch (IOException e1) { }
             host.isRunning = false;
             
             DataOutput dataOutput = new DataOutput();

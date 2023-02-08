@@ -3,6 +3,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+// Making a host thread. While running wait for more connections
+// Stop when !isRunning (changed by HostPanel)
 public class Host extends Thread {
     static ArrayList<Socket> connections = new ArrayList<Socket>();
 
@@ -22,7 +24,7 @@ public class Host extends Thread {
             try {
                 socket = serverSocket.accept();
                 new Client(socket).start();
-            } catch (IOException e) {}
+            } catch (IOException e) { }
             System.out.println("Client added");
         }
     } 

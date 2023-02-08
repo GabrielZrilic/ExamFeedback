@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+// Starting thread for every client socket
 public class Client extends Thread {
     public Socket socket;
     public InputStreamReader in;
@@ -40,8 +41,6 @@ public class Client extends Thread {
             System.out.println(receivedData);
             HostPanel.numOfStudents.incrementAndGet();
             Data.users.get().add(new User(receivedData, User.side.HOST));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) { }
     }
 }
