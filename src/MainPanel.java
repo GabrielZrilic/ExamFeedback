@@ -9,6 +9,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+// Main menu
 public class MainPanel extends JPanel implements ActionListener {
     public static Font font;
     
@@ -46,13 +47,13 @@ public class MainPanel extends JPanel implements ActionListener {
         clientButton.addActionListener(this);
     }
 
-    public static GridBagConstraints setLocation(int x, int y, int fill, double weightx, double weighty, int gridwidth) {
+    public static GridBagConstraints setLocation(int x, int y, int fill, double weightx, double weighty, int gridwidth, int paddingTop) {
         GridBagConstraints c = new GridBagConstraints();
         c.weightx = weightx; c.weighty = weighty;
         c.gridx = x; c.gridy = y;
         c.fill = fill;
         c.gridwidth = gridwidth;
-        c.insets = new Insets(30, 10, 30, 10);
+        c.insets = new Insets(paddingTop, 10, 30, 10);
         return c;
     }
 

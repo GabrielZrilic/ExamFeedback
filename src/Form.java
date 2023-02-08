@@ -6,10 +6,13 @@ import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+// One question - listing every option input
 class Question extends JPanel {
     private JPanel buttonsPanel;
     public ButtonGroup buttonsGroup;
@@ -26,7 +29,7 @@ class Question extends JPanel {
         label.setFont(MainPanel.font.deriveFont((float) 25));
         this.add(label);
 
-        this.add(label, MainPanel.setLocation(0, 0, GridBagConstraints.BOTH, 1, 0.5, 2));
+        this.add(label, MainPanel.setLocation(0, 0, GridBagConstraints.BOTH, 1, 0.5, 2, 30));
 
         for(int i = 0; i<data.ansClient.size(); i++) {
             buttonsArray.add(new JRadioButton(data.ansClient.get(i)));
@@ -35,8 +38,8 @@ class Question extends JPanel {
             buttonsGroup.add(buttonsArray.get(i));
             buttonsPanel.add(buttonsArray.get(i));
         }
-        this.add(Box.createRigidArea(new Dimension(20, 0)), MainPanel.setLocation(0, 1, GridBagConstraints.HORIZONTAL, 0, 0, 1));
-        this.add(buttonsPanel, MainPanel.setLocation(1, 1, GridBagConstraints.HORIZONTAL, 0, 0.5, 1));
+        this.add(Box.createRigidArea(new Dimension(20, 0)), MainPanel.setLocation(0, 1, GridBagConstraints.HORIZONTAL, 0, 0, 1, 30));
+        this.add(buttonsPanel, MainPanel.setLocation(1, 1, GridBagConstraints.HORIZONTAL, 0, 0.5, 1, 30));
     }
 } 
 
@@ -58,7 +61,11 @@ public class Form extends JPanel{
         String retS = "";
 
         for(int i = 0; i<questions.size(); i++) {
-            retS += questions.get(i).buttonsGroup.getSelection().getActionCommand() + "@";
+            if(questions.get(i).buttonsGroup.getSelection() != null) retS += questions.get(i).buttonsGroup.getSelection().getActionCommand() + "@";
+            else {
+                JOptionPane.showMessageDialog(new JFrame("Greška"), "Odgovori na sva pitanja");
+                return null;
+            }
         }
 
         return retS;

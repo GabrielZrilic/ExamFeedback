@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+// Starting thread for every client socket
 public class Client extends Thread {
     public Socket socket;
     public InputStreamReader in;
@@ -27,7 +28,7 @@ public class Client extends Thread {
     }
 
     public void sendData() throws IOException {
-        String str = Integer.toString(HostPanel.idnum.getAndIncrement()) + "@" + Integer.toString(HostPanel.questionNum.getAcquire()) +
+        String str = Integer.toString(HostPanel.idnum.getAndIncrement()) + "@" + Integer.toString(HostPanel.questionNum.get()) +
                       "@" + HostPanel.stringSend;
         out.println(str);
     }
@@ -37,9 +38,9 @@ public class Client extends Thread {
         try {
             sendData();
             getData();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println(receivedData);
+            System.out.println(receivedData);
+            HostPanel.numOfStudents.incrementAndGet();
+            Data.users.get().add(new User(receivedData, User.side.HOST));
+        } catch (IOException e) { }
     }
 }
