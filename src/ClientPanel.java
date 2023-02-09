@@ -33,8 +33,8 @@ public class ClientPanel extends JPanel implements ActionListener {
 
     public ClientPanel() {
         portInput = new JTextField();
-        nameInput = new JTextField("Demo");
-        ipInput = new JTextField("192.168.5.19");
+        nameInput = new JTextField("");
+        ipInput = new JTextField("");
         joinButton = new JButton("Riješi anketu");
         endButton = new JButton("Pošalji");
         
